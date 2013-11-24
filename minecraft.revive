@@ -1,0 +1,17 @@
+#!/bin/bash
+subdir=$1
+deadplayers=`cat /tmp/minecraft/$subdir/banned-players.txt | tail -n +4 | sed 's/|/ /g' | awk '{print $1}'`
+echo $deadplayers
+for i in $deadplayers
+  do
+    timeofdeath=`cat /tmp/minecraft/$subdir/banned-players.txt | tail -n +4 | sed 's/|/ /g' | grep $i | awk '{print $2,$3}'`
+    echo User $i died @ $timeofdeath
+    unixtime=`date +%s --date="${timeofdeath}"`
+    if [ `expr $unixtime + 86400` -le `date +%s` ] ; then
+      echo "User $i has been dead for over a day! Reviving!"
+      sed -i "/${i}/d" /tmp/minecraft/$subdir/banned-players.txt
+      rm /tmp/minecraft/$subdir/world_hardcore/players/$i.dat
+    else
+      echo "User $i has not been dead for long enough! Not doing anything."
+    fi
+done

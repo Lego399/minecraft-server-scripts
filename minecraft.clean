@@ -1,0 +1,18 @@
+#!/bin/bash
+backupdir=/var/backups/minecraft
+subdir=$1
+maxsize=$2
+cd $backupdir
+clean() {
+  if [ `du -b $subdir | awk '{print $1}'` -ge $maxsize ]; then
+      echo Removing the oldest file
+      oldfile=$backupdir/$subdir/`ls ${backupdir}/${subdir} -1tr | head -1`
+      echo $oldfile >> $backupdir/purgelog
+      rm $oldfile
+      clean
+    else
+      echo Size is less than maximum allowed. No action will be taken.
+    fi
+  return
+}
+clean

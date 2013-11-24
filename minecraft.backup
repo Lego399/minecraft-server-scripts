@@ -1,0 +1,18 @@
+#!/bin/bash
+cd /tmp
+timestamp=`date +%Y-%m-%d-%H%M%S`
+filename=minecraft-$timestamp.tar.gz
+backupdir=/var/backups/minecraft
+subdir=persistence
+fullpath=$backupdir/$subdir/$filename
+date
+screen -S minecraft_1 -X stuff "save-off"'\015'
+screen -S minecraft_1 -X stuff "save-all"'\015'
+screen -S minecraft_2 -X stuff "save-off"'\015'
+screen -S minecraft_2 -X stuff "save-all"'\015'
+sleep 10
+echo $filename
+tar -czf $fullpath minecraft
+ln -sf $fullpath $backupdir/latest-$subdir.tar.gz
+screen -S minecraft_1 -X stuff "save-on"'\015'
+screen -S minecraft_2 -X stuff "save-on"'\015'

@@ -1,0 +1,8 @@
+#!/bin/bash
+servernum=$1
+cd /tmp/minecraft/server_$servernum
+echo Stopping server \#$servernum
+screen -S minecraft_$servernum -X stuff "stop"'\015'
+sleep 15
+echo Starting server \#$servernum
+screen -AdmS minecraft_$servernum java -Xmx1024M -Xms1024M -jar latest.jar

@@ -1,0 +1,6 @@
+#!/bin/bash
+cd $1
+backupdir=/var/backups/minecraft
+subdir=persistence
+fullpath=$backupdir/latest-$subdir.tar.gz
+tar -xzf $fullpath
